@@ -1,105 +1,106 @@
 # PumpkinLab
 
-Een vrolijk-griezelig browserspel voor kinderen van ongeveer 12 jaar. Je loopt rond in een
-Halloween-laboratorium (schuin van boven gezien), slaat pompoenen kapot met je knuppel en raapt
-de muntjes op. Maar pas op: uit sommige pompoenen klimt een skelet, een zombie of een geest!
+A cheerful, spooky browser game for kids around 12 years old. You walk around a Halloween lab
+(seen at an angle from above), smash pumpkins with your club, and pick up the coins. But watch
+out: a skeleton, a zombie, or a ghost climbs out of some of the pumpkins!
 
-- Elk level heeft 3 kamers met veel pompoenen: in level 1 zijn het er 10, 12 en 14, en elk level
-  komen er meer bij (hooguit 30). Zijn alle pompoenen kapot en alle skeletten en zombies uit de
-  pompoenen verslagen, dan gaat de deur open.
-- Elke 5 tot 10 seconden (op *Normaal*) klimt er vanzelf een monster uit de vloer: meestal een
-  zombie, soms een skelet en vanaf level 2 af en toe een geest. Deze monsters houden de deur niet
-  dicht: je mag ze ook laten staan en door de deur rennen.
-- Na elke kamer en elk level kom je in de winkel, met vier afdelingen:
-  - **Knuppels**: steen, ijzer, goud en vanaf level 8 de diamanten knuppel (pompoen in 1 klap).
-  - **Upgrades** (voor altijd): snelle schoenen, snelle zwaai, lange arm (verder slaan),
-    geluksklaver (meer munten per pompoen), extra hartje (tot 7) en een extra
-    dierplek (4e plek vanaf level 7, 5e vanaf level 12).
-  - **Dieren**: maak je dieren sterker (niveau 1 → 2 → 3).
-  - **Hartjes**: een verloren hartje bijvullen.
+- Every level has 3 rooms full of pumpkins: in level 1 there are 10, 12, and 14, and each level
+  adds more (up to 30). Once all the pumpkins are smashed and all the skeletons and zombies from
+  the pumpkins are defeated, the door opens.
+- Every 5 to 10 seconds (on *Normal*), a monster climbs out of the floor on its own: usually a
+  zombie, sometimes a skeleton, and from level 2 on, now and then a ghost. These monsters don't
+  keep the door shut: you can also just leave them and run through the door.
+- After every room and every level you visit the shop, which has four sections:
+  - **Clubs**: stone, iron, gold, and from level 8 the diamond club (smashes a pumpkin in 1 hit).
+  - **Upgrades** (forever): speedy shoes, quick swing, long arm (hit from further away),
+    lucky clover (more coins per pumpkin), extra heart (up to 7), and an extra
+    pet spot (4th spot from level 7, 5th from level 12).
+  - **Pets**: make your pets stronger (level 1 → 2 → 3).
+  - **Hearts**: refill a lost heart.
 
-  Wat nog op slot zit, zie je al met een slotje en "Vanaf level X".
-- Een knuppel uit een pompoen maakt je knuppel één stap beter, alleen voor dat level en hooguit
-  tot goud.
-- Na level 1 krijg je de wolf, daarna bij elk level een nieuw dier (hond, beer, kat, uil,
-  vleermuis, schildpad, egel, raaf). Je neemt er 3 mee per kamer, met upgrades 4 of 5.
-- Geesten kun je alleen raken nadat de wolf heeft gehuild.
-- Hartjes op? Dan begin je het level opnieuw en ben je de muntjes van dat level kwijt.
-- Na 5 levels heb je gewonnen; daarna kun je eindeloos doorspelen.
-- Nederlands en Engels, drie muziekjes (muziek en geluidseffecten los aan/uit te zetten), voortgang
-  wordt automatisch bewaard (localStorage).
+  Things that are still locked already show up with a lock icon and "From level X".
+- A club from a pumpkin upgrades your club by one step, only for that level and at most up
+  to gold.
+- After level 1 you get the wolf, then a new pet every level (dog, bear, cat, owl,
+  bat, turtle, hedgehog, raven). You take 3 of them into each room, or 4 or 5 with upgrades.
+- You can only hit ghosts after the wolf has howled.
+- Out of hearts? Then you restart the level and lose the coins you earned in that level.
+- Beat 5 levels and you win; after that you can keep playing forever.
+- Dutch and English, three songs (music and sound effects can be turned on/off separately), and
+  progress is saved automatically (localStorage).
 
-Alles (graphics en geluid) wordt in code gemaakt. Er zijn geen libraries, geen plaatjes of
-geluidsbestanden en geen build-stap nodig.
+Everything (graphics and sound) is made in code. No libraries, no image or sound files, and no
+build step needed.
 
-## Starten
+## Starting the game
 
-Het spel gebruikt ES-modules, dus het moet via een (lokale) webserver draaien; het HTML-bestand
-direct openen werkt niet.
+The game uses ES modules, so it has to run through a (local) web server; opening the HTML file
+directly won't work.
 
-**macOS:** dubbelklik `start.command`. Er opent een Terminal-venster met de server en het spel
-opent in je browser. Sluit het venster om te stoppen. (Mag het de eerste keer niet openen? Klik
-dan met de rechtermuisknop op het bestand en kies *Open*.)
+**macOS:** double-click `start.command`. A Terminal window opens with the server, and the game
+opens in your browser. Close the window to stop. (Won't it open the first time? Then right-click
+the file and choose *Open*.)
 
-**Met de hand** (elk systeem met Python 3), in deze map:
+**By hand** (any system with Python 3), in this folder:
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Open daarna http://localhost:8000 in de browser.
+Then open http://localhost:8000 in your browser.
 
-Spelen op een tablet of telefoon in hetzelfde wifi-netwerk: start de server met
-`python3 -m http.server 8000 --bind 0.0.0.0` en open `http://<ip-adres-van-je-computer>:8000`.
+To play on a tablet or phone on the same Wi-Fi network: start the server with
+`python3 -m http.server 8000 --bind 0.0.0.0` and open `http://<your-computer-ip>:8000`.
 
-## Besturing
+## Controls
 
-| Actie | Toetsenbord | Touch (tablet/telefoon) |
+| Action | Keyboard | Touch (tablet/phone) |
 |---|---|---|
-| Lopen | pijltjestoetsen of W A S D | joystick links onder |
-| Slaan | spatie, Z of J | knop *Slaan* rechts onder (ingedrukt houden = blijven slaan) |
-| Pauze | Esc of P | pauzeknop rechts boven |
-| Menu's | pijltjes + Enter/spatie, Esc = terug | tikken |
+| Walk | arrow keys or W A S D | joystick at the bottom left |
+| Hit | space bar, Z, or J | *Hit* button at the bottom right (hold it down = keep hitting) |
+| Pause | Esc or P | pause button at the top right |
+| Menus | arrow keys + Enter/space bar, Esc = back | tap |
 
-De muis werkt overal in de menu's. Instellingen (taal, moeilijkheid, liedje, volume) vind je in
-het titelscherm en in het pauzemenu. Daar staan ook twee schakelaars: **Muziek aan/uit** en
-**Geluidseffecten aan/uit**. Ze worden onthouden, ook als je het spel later opnieuw opent.
+The mouse works everywhere in the menus. You'll find **Settings** (language, difficulty, song,
+volume) on the title screen and in the pause menu. That's also where you can switch the game to
+English, and where you'll find two switches: **Music on/off** and **Sound effects on/off**. They
+are remembered, even if you open the game again later.
 
-## Bestanden
+## Files
 
 ```
-index.html            pagina met het canvas en de UI-laag
-style.css             opmaak van alle menu's, HUD, toasts en touch-knoppen
-DESIGN.md             spelregels en afspraken tussen de modules
-start.command         macOS-starter (server + browser)
+index.html            page with the canvas and the UI layer
+style.css             styling for all menus, HUD, toasts, and touch buttons
+DESIGN.md             game rules and agreements between the modules
+start.command         macOS launcher (server + browser)
 src/
-  config.js           alle spelgetallen (balans, levels, dieren, knuppels, upgrades, spawner)
-  main.js             start alles op; window.pompoenlab = engine (handig om te debuggen)
+  config.js           all game numbers (balance, levels, pets, clubs, upgrades, spawner)
+  main.js             starts everything up; window.pompoenlab = engine (handy for debugging)
   game/
-    engine.js         hoofdlus en spelverloop (titel, levels, kamers, winkel, game over)
-    world.js          simulatie van één kamer: speler, slaan, munten, deur, monsters die vanzelf verschijnen
-    room.js           maakt een kamer (pompoenen, obstakels, muurdecor)
-    draw.js           tekent de wereld (y-gesorteerd, schaduwen, effecten)
-    screen.js         canvasgrootte, letterboxing en scherpte op retina-schermen
-    input.js          toetsenbord + touch samengevoegd
-    monsters.js       skelet, zombie en geest (gedrag)
-    pets.js           de 9 dieren (gedrag en bonussen)
+    engine.js         main loop and game flow (title, levels, rooms, shop, game over)
+    world.js          simulation of one room: player, hitting, coins, door, monsters that appear on their own
+    room.js           builds a room (pumpkins, obstacles, wall decorations)
+    draw.js           draws the world (y-sorted, shadows, effects)
+    screen.js         canvas size, letterboxing, and sharpness on retina screens
+    input.js          keyboard + touch combined
+    monsters.js       skeleton, zombie, and ghost (behavior)
+    pets.js           the 9 pets (behavior and bonuses)
   render/
-    sprites.js        ingang voor alle tekenfuncties + iconen voor de UI
-    art-room.js       vloer, muren, deur, muurdecor
-    art-actors.js     speler, knuppels, monsters
-    art-pets.js       dieren
-    art-props.js      pompoenen, obstakels, munten
-    art-fx.js         effecten (scherven, sterretjes, gehuil, ...)
-    art-util.js       gedeelde tekenhulpjes
+    sprites.js        entry point for all drawing functions + icons for the UI
+    art-room.js       floor, walls, door, wall decorations
+    art-actors.js     player, clubs, monsters
+    art-pets.js       pets
+    art-props.js      pumpkins, obstacles, coins
+    art-fx.js         effects (shards, little stars, howling, ...)
+    art-util.js       shared drawing helpers
   ui/
-    ui.js             alle schermen, HUD, toasts en touch-besturing
-    i18n.js           teksten in het Nederlands en Engels
-    save.js           opslaan en laden van voortgang en instellingen
-    shop.js           winkel-artikelen (knuppels, upgrades, dieren, hartjes) en kopen
+    ui.js             all screens, HUD, toasts, and touch controls
+    i18n.js           texts in Dutch and English
+    save.js           saving and loading progress and settings
+    shop.js           shop items (clubs, upgrades, pets, hearts) and buying
   audio/
-    audio.js          WebAudio: muziek en geluidseffecten (API voor de rest van het spel)
-    music.js          de drie muziekjes
-    sfx.js            de geluidseffecten
-    synth.js          synthesizer-bouwstenen
+    audio.js          WebAudio: music and sound effects (API for the rest of the game)
+    music.js          the three songs
+    sfx.js            the sound effects
+    synth.js          synthesizer building blocks
 ```
