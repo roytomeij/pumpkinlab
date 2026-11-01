@@ -52,6 +52,12 @@ Then open http://localhost:8000 in your browser.
 To play on a tablet or phone on the same Wi-Fi network: start the server with
 `python3 -m http.server 8000 --bind 0.0.0.0` and open `http://<your-computer-ip>:8000`.
 
+## Online
+
+The current version runs at https://pumpkinlab.tomeij.net. Every push to `main` builds a Docker image
+(nginx with `index.html`, `style.css` and `src/`; not `versies/`) and deploys it to the web server
+(`.github/workflows/deploy.yml`).
+
 ## Controls
 
 | Action | Keyboard | Touch (tablet/phone) |
