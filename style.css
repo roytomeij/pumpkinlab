@@ -45,9 +45,31 @@ html, body {
   touch-action: none;
   -webkit-tap-highlight-color: transparent;
   overscroll-behavior: none;
+  /* iOS liggend: geen automatische tekstvergroting (die oogt als "inzoomen") */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-body { font-family: var(--font); color: var(--text); }
+/* Body vastzetten: iOS negeert overflow:hidden voor het scrollen/verschuiven van de pagina zelf. */
+body { font-family: var(--font); color: var(--text); position: fixed; inset: 0; }
+
+/* Dubbeltik-zoom / vergrootglas / callout op iOS, laag voor laag:
+   - touch-action wordt niet geërfd en scrollcontainers (.panel, lijsten) resetten het naar "auto";
+     daarom krijgt elk element pan-x pan-y (scrollen mag, zoomen niet). Klassen hieronder
+     (.hit-btn/.joy none, .shop-list pan-y, .slider pan-x) zijn specifieker en winnen.
+   - geen tekstselectie of callout, behalve in echte tekstvelden. */
+*, *::before, *::after {
+  touch-action: pan-x pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+button, a, label, select, [role="button"], [role="switch"] { touch-action: manipulation; }
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
 
 /* ------------------------------------------------------------ basislaag */
 #ui-root, .ui {
@@ -233,16 +255,30 @@ body { font-family: var(--font); color: var(--text); }
   line-height: 1;
   letter-spacing: .01em;
   white-space: nowrap;
+  /* "Arial Rounded MT Bold" heeft maar één (regular-gemarkeerde) snit: WebKit/iOS maakte er
+     anders een nep-vet van, waardoor de letters dik werden en over elkaar heen liepen. */
+  font-synthesis: none;
 }
 .logo-w { position: relative; display: inline-block; }
 .logo-w.w2 { margin-left: .05em; }
+/* gloed achter elk woord als zachte gradient (een text-shadow-gloed wordt in WebKit
+   ook om de -webkit-text-stroke getekend en wordt dan een dikke, vlekkerige waas) */
+.logo-w::before {
+  content: ""; position: absolute; z-index: 0; inset: -.35em -.3em -.25em;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 138, 31, .55), rgba(255, 138, 31, .22) 55%, rgba(255, 138, 31, 0));
+}
+.logo-w.w2::before {
+  inset: -.35em -.35em -.3em;
+  background: radial-gradient(closest-side, rgba(124, 255, 107, .55), rgba(124, 255, 107, .22) 55%, rgba(124, 255, 107, 0));
+}
 .logo-l {
   position: relative;
   z-index: 1;
   display: inline-block;
   color: var(--ink);
   -webkit-text-stroke: .17em var(--ink);
-  text-shadow: 0 .07em 0 var(--ink), 0 .1em .02em #000, 0 0 .4em rgba(255, 138, 31, .6);
+  text-shadow: 0 .07em 0 var(--ink), 0 .1em .02em #000;
   transform: rotate(calc((var(--i) - 3) * 1.4deg));
   animation: letter-bob 2.6s ease-in-out infinite;
   animation-delay: calc(var(--i) * -0.18s);
@@ -259,7 +295,6 @@ body { font-family: var(--font); color: var(--text); }
 }
 .w2 .logo-l {
   font-size: 1.06em;
-  text-shadow: 0 .07em 0 var(--ink), 0 .1em .02em #000, 0 0 .45em rgba(124, 255, 107, .7);
   animation-name: slime-wobble;
   animation-duration: 3s;
 }
@@ -267,9 +302,10 @@ body { font-family: var(--font); color: var(--text); }
 .w2 .logo-l:nth-child(2) { transform: rotate(4deg) translateY(.03em); }
 .w2 .logo-l:nth-child(3) { transform: rotate(-3deg); }
 .w2 .logo-l::after { background-image: linear-gradient(180deg, #f0ffc8 0%, #a8ff7a 35%, #5fe04a 68%, #3fb832 100%); }
+/* elke druppel hangt in zijn eigen letter (L, a, b): positie in % van de letterbreedte */
 .slime-drip {
-  position: absolute; z-index: 2; top: .9em;
-  width: .12em; height: var(--len, .2em);
+  position: absolute; z-index: 2; top: .84em; left: var(--x, 50%);
+  width: .12em; height: var(--len, .2em); margin-left: -.06em;
 }
 .slime-drip > i {
   position: absolute; inset: 0; display: block;
@@ -293,9 +329,10 @@ body { font-family: var(--font); color: var(--text); }
   border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
   background: radial-gradient(circle at 35% 35%, #f0ffc8, #7cff6b 50%, #2c8a2a);
 }
-.slime-drip.d1 { left: .3em; --len: .3em; }
-.slime-drip.d2 { left: .98em; --len: .36em; animation-delay: -1.2s; }
-.slime-drip.d3 { left: 1.6em; --len: .24em; animation-delay: -2.3s; }
+/* draai de letter-kanteling terug, zodat de druppels recht naar beneden hangen */
+.slime-drip.d1 { --x: 52%; --len: .3em; transform-origin: 50% 0; rotate: 6deg; }
+.slime-drip.d2 { --x: 60%; --len: .36em; animation-delay: -1.2s; transform-origin: 50% 0; rotate: -4deg; }
+.slime-drip.d3 { --x: 55%; --len: .24em; animation-delay: -2.3s; transform-origin: 50% 0; rotate: 3deg; }
 .slime-bub {
   position: absolute; bottom: .92em; z-index: 2;
   width: .11em; height: .11em; border-radius: 50%;
@@ -307,6 +344,11 @@ body { font-family: var(--font); color: var(--text); }
 .slime-bub.s1 { left: .7em; }
 .slime-bub.s2 { left: 1.3em; width: .08em; height: .08em; animation-delay: -1s; }
 .slime-bub.s3 { left: 1.85em; width: .13em; height: .13em; animation-delay: -1.9s; }
+/* telefoon: geen schaal-wiebel op de letters; iOS schaalt dan een gerasterde bitmap
+   van de tekst en de omlijning wordt wazig. Alleen het zachte op-en-neer blijft. */
+@media (max-height: 520px), (max-width: 520px) {
+  .w2 .logo-l { animation-name: letter-bob; }
+}
 
 /* embleem: held-pompoen met labbril, kolf met slijm en een vonk */
 .lab-emblem { --pk: clamp(64px, 15vmin, 150px); position: relative; display: flex; justify-content: center; }
@@ -899,7 +941,10 @@ kbd {
 /* ------------------------------------------------------------ kleine schermen */
 @media (max-height: 520px) {
   .title-main { flex-direction: row; gap: clamp(16px, 5vw, 60px); }
-  .logo { font-size: clamp(40px, 12vmin, 80px); }
+  /* liggende telefoon: logo zo groot als de linkerkolom (naast het menu, binnen de notch) toelaat */
+  .logo { font-size: clamp(36px, min(15vmin, (51vw - var(--safe-l) - var(--safe-r) - 16px) / 6.9), 80px); margin-bottom: .38em; }
+  .lab-emblem, .pumpkin.hero { --pk: clamp(56px, 21vmin, 100px); }
+  .subtitle { font-size: clamp(12px, 4vmin, 15px); text-wrap: balance; }
   .menu { width: min(360px, 44vw); }
   .menu .row { flex-wrap: wrap; }
   .pumpkin.deco { display: none; }

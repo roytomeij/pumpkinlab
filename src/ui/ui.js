@@ -182,12 +182,14 @@ function labLogo(word) {
   const parts = m ? [m[1], m[2]] : [word];
   let i = 0;
   const letters = (s) => [...s].map((ch) => h('span', { class: 'logo-l', 'data-l': ch, style: { '--i': i++ } }, ch));
+  // De druppels hangen ín de letters (niet op vaste em-afstanden in het woord),
+  // zodat ze ook goed zitten als iOS een ander lettertype kiest.
+  const glow = letters(parts[0]);
+  const slime = parts[1] ? letters(parts[1]) : [];
+  slime.slice(0, 3).forEach((el, k) => el.append(h('span', { class: `slime-drip d${k + 1}`, 'aria-hidden': 'true' }, h('i'))));
   return h('h1', { class: 'logo', 'aria-label': word },
-    h('span', { class: 'logo-w w1' }, letters(parts[0])),
-    parts[1] ? h('span', { class: 'logo-w w2' }, letters(parts[1]),
-      h('span', { class: 'slime-drip d1', 'aria-hidden': 'true' }, h('i')),
-      h('span', { class: 'slime-drip d2', 'aria-hidden': 'true' }, h('i')),
-      h('span', { class: 'slime-drip d3', 'aria-hidden': 'true' }, h('i')),
+    h('span', { class: 'logo-w w1' }, glow),
+    parts[1] ? h('span', { class: 'logo-w w2' }, slime,
       h('span', { class: 'slime-bub s1', 'aria-hidden': 'true' }),
       h('span', { class: 'slime-bub s2', 'aria-hidden': 'true' }),
       h('span', { class: 'slime-bub s3', 'aria-hidden': 'true' })) : null);

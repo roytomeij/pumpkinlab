@@ -32,6 +32,69 @@ function keyCode(e) {
   return k || '';
 }
 
+// ---------------------------------------------------------------- iOS zoom guard
+// iOS Safari ignores `user-scalable=no` and does not honour `touch-action` everywhere (root element,
+// gaps, freshly shown/transformed elements), so rapid taps on the hit button could double-tap-zoom.
+// CSS (style.css) is the first layer; this is the second one.
+const DOUBLE_TAP_MS = 350;
+const TAP_SLOP = 12;   // px: a touch that moved further is a swipe, not a tap
+const FORM_TAGS = new Set(['INPUT', 'SELECT', 'TEXTAREA', 'OPTION']);
+
+function isFormControl(el) {
+  return !!el && (FORM_TAGS.has(el.tagName) || el.isContentEditable);
+}
+
+// Inside a list the player scrolls (shop, pet grid): leave the touch alone.
+function inScrollable(el) {
+  for (let n = el; n && n.nodeType === 1 && n !== document.body; n = n.parentElement) {
+    if (n.scrollHeight > n.clientHeight + 1 || n.scrollWidth > n.clientWidth + 1) {
+      const cs = getComputedStyle(n);
+      if (/(auto|scroll)/.test(cs.overflowY + cs.overflowX)) return true;
+    }
+  }
+  return false;
+}
+
+/** Install once: blocks pinch (gesture*), dblclick and the iOS double-tap zoom without losing taps. */
+export function installZoomGuard(win = window) {
+  const doc = win.document;
+  if (!doc || win.__zoomGuard) return;
+  win.__zoomGuard = true;
+
+  const block = (e) => { if (e.cancelable) e.preventDefault(); };
+  // Non-standard WebKit pinch events (iOS); harmless elsewhere.
+  for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) doc.addEventListener(ev, block, { passive: false });
+  doc.addEventListener('dblclick', (e) => { if (!isFormControl(e.target)) block(e); }, { passive: false });
+
+  const starts = new Map(); // touch identifier -> [x, y]
+  let lastTapEnd = -1e9;
+  doc.addEventListener('touchstart', (e) => {
+    for (const t of e.changedTouches) starts.set(t.identifier, [t.clientX, t.clientY]);
+  }, { passive: true, capture: true });
+  doc.addEventListener('touchcancel', (e) => {
+    for (const t of e.changedTouches) starts.delete(t.identifier);
+  }, { passive: true, capture: true });
+
+  doc.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const s = starts.get(t.identifier);
+    for (const c of e.changedTouches) starts.delete(c.identifier);
+    if (s && Math.hypot(t.clientX - s[0], t.clientY - s[1]) > TAP_SLOP) return; // swipe/drag
+    const now = performance.now();
+    const quick = now - lastTapEnd < DOUBLE_TAP_MS;
+    lastTapEnd = now;
+    if (!quick || !e.cancelable) return;
+    const el = e.target && e.target.nodeType === 1 ? e.target : e.target && e.target.parentElement;
+    if (!el || isFormControl(el) || inScrollable(el)) return;
+    // Second quick tap: cancel the zoom. That also cancels the synthesized click, so fire it
+    // ourselves for UI controls. The joystick/hit button work on pointer events and need nothing.
+    e.preventDefault();
+    const ctl = el.closest('button, a[href], label, [role="button"], [role="switch"]');
+    if (ctl && !ctl.disabled && !ctl.closest('.touch')) ctl.click();
+  }, { passive: false });
+}
+
 export function createInput(canvas) {
   const held = new Set();          // currently pressed key codes
   let attackQueued = false;

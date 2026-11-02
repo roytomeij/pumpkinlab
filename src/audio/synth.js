@@ -86,18 +86,36 @@ function createDelay(ctx, dest, time, feedback, wet) {
   fb.connect(delay);
   lp.connect(out);
   out.connect(dest);
-  return { input, delay };
+  // Break the feedback loop and detach, so a dropped music player leaves no echo tail running.
+  const dispose = () => {
+    for (const n of [input, delay, fb, lp, out]) { try { n.disconnect(); } catch (e) { /* ignore */ } }
+  };
+  return { input, delay, dispose };
 }
 
 export function createShared(ctx, dest, { delay = 0.3, feedback = 0.3, wet = 0.35 } = {}) {
   return { noise: getNoise(ctx), organ: getOrgan(ctx), fx: createDelay(ctx, dest, delay, feedback, wet) };
 }
 
-// Master chain: music + sfx buses -> master -> compressor -> soft clipper -> destination.
+// Master chain: music bus -------------------------------> master -> compressor -> soft clipper -> destination
+//               sfx bus -> sfx limiter (fast) -> trim ----/
+// The sfx limiter catches stacked one-shots (swing + crack + coins in one frame) before they
+// hit the master compressor, so a burst of effects no longer pumps the music down.
+// (music and sfx must stay the first two GainNodes created: tests read them as the buses.)
 export function createChain(ctx) {
   const music = ctx.createGain();
   const sfx = ctx.createGain();
   const master = ctx.createGain();
+  const sfxLimit = ctx.createDynamicsCompressor();
+  sfxLimit.threshold.value = -6;
+  sfxLimit.knee.value = 4;
+  sfxLimit.ratio.value = 12;
+  sfxLimit.attack.value = 0.002;
+  sfxLimit.release.value = 0.12;
+  // A compressor adds automatic makeup gain (~+3 dB here, measured with an offline render); undo it so
+  // single effects keep their old loudness and only the stacked peaks get squashed.
+  const sfxTrim = ctx.createGain();
+  sfxTrim.gain.value = 0.74;
   master.gain.value = 0.9;
   const comp = ctx.createDynamicsCompressor();
   comp.threshold.value = -14;
@@ -117,7 +135,9 @@ export function createChain(ctx) {
   }
   clip.curve = curve;
   music.connect(master);
-  sfx.connect(master);
+  sfx.connect(sfxLimit);
+  sfxLimit.connect(sfxTrim);
+  sfxTrim.connect(master);
   master.connect(comp);
   comp.connect(clip);
   clip.connect(ctx.destination);

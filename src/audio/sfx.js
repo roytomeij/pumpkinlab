@@ -181,3 +181,38 @@ export const SFX = {
     }
   },
 };
+
+// Voice management per effect (used by audio.js):
+//   dur   seconds the effect sounds (dry part, used to know when a voice is done)
+//   gap   the same effect cannot restart within this many seconds
+//   max   simultaneous voices of this effect
+//   steal true: at the limit the oldest voice is faded out quickly; false: the new one is skipped
+//         (long jingles / creature calls should finish, short hits should stay snappy)
+const M = (dur, gap, max, steal = true) => ({ dur, gap, max, steal });
+export const SFX_META = {
+  swing: M(0.2, 0.09, 1),
+  hitPumpkin: M(0.18, 0.07, 2),
+  smashPumpkin: M(0.46, 0.08, 2),
+  coin: M(0.46, 0.06, 3),
+  clubUp: M(0.75, 0.2, 1, false),
+  hitMonster: M(0.13, 0.07, 2),
+  monsterDie: M(0.53, 0.08, 2),
+  skeletonBreak: M(0.37, 0.08, 2),
+  zombieGroan: M(1.0, 0.3, 1, false),
+  ghostWail: M(1.25, 0.3, 1, false),
+  ghostImmune: M(0.28, 0.12, 1),
+  howl: M(1.25, 0.3, 1, false),
+  hurt: M(0.2, 0.09, 1),
+  shieldBlock: M(0.55, 0.09, 2),
+  gameOver: M(2.3, 1.0, 1, false),
+  roomClear: M(0.8, 0.5, 1, false),
+  levelComplete: M(1.9, 1.0, 1, false),
+  newPet: M(1.25, 0.5, 1, false),
+  buy: M(0.7, 0.08, 2),
+  click: M(0.04, 0.05, 2),
+  doorOpen: M(1.65, 0.5, 1, false),
+  bearRoar: M(0.65, 0.3, 1, false),
+  batSquee: M(0.17, 0.1, 1),
+  rise: M(1.0, 0.15, 2, false),
+};
+export const SFX_DEFAULT_META = M(0.5, 0.07, 2);
