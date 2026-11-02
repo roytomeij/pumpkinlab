@@ -322,6 +322,30 @@ export function createUI({ root, input, audio } = {}) {
     return back;
   }
 
+  // ---------------------------------------------------------------- taal kiezen
+  // Eén pad voor Instellingen én de NL|EN-knop op het titelscherm: profiel bijwerken,
+  // via onSettingsChange laten opslaan, en het scherm in de nieuwe taal tekenen.
+  function pickLang(profile, onSettingsChange, v) {
+    profile.lang = v;
+    try { onSettingsChange && onSettingsChange(profile); } catch (e) { console.error(e); }
+    if (getLang() !== v) setLang(v); else renderScreen();
+  }
+
+  // Kleine NL|EN-schakelaar (tekst, geen vlaggen: die tonen niet op Windows).
+  function langToggle(profile, onSettingsChange) {
+    const cur = getLang();
+    const opt = (v, txt, name) => {
+      const b = h('button', {
+        type: 'button', class: 'lang-btn', lang: v, 'aria-pressed': String(cur === v),
+        'aria-label': `${txt} – ${name}`, title: name, 'data-fk': 'title-lang-' + v,
+      }, txt);
+      b.addEventListener('click', () => { unlock(); sfx('click'); if (getLang() !== v || profile.lang !== v) pickLang(profile, onSettingsChange, v); });
+      return b;
+    };
+    return h('div', { class: 'lang-toggle', role: 'group', 'aria-label': 'Taal / Language' },
+      opt('nl', 'NL', 'Nederlands'), h('span', { class: 'lang-sep', 'aria-hidden': 'true' }), opt('en', 'EN', 'English'));
+  }
+
   // ---------------------------------------------------------------- instellingen
   function settingsModal(state, profile, onSettingsChange, returnFk) {
     const changed = () => { try { onSettingsChange && onSettingsChange(profile); } catch (e) { console.error(e); } };
@@ -379,7 +403,7 @@ export function createUI({ root, input, audio } = {}) {
 
     const body = [
       seg(t('settings.language'), 'lang-', [{ v: 'nl', label: 'Nederlands' }, { v: 'en', label: 'English' }], profile.lang,
-        (v) => { profile.lang = v; changed(); if (getLang() !== v) setLang(v); else renderScreen(); }),
+        (v) => pickLang(profile, onSettingsChange, v)),
       seg(t('settings.difficulty'), 'diff-', ['easy', 'normal', 'hard'].map((v) => ({ v, label: t('difficulty.' + v) })), profile.difficulty,
         (v) => { profile.difficulty = v; changed(); renderScreen(); }),
       audioRow(t('settings.musicOn'), 'musicOn', 'musicVolume', 'vol-music', 'setMusicVolume', t('settings.musicVolume')),
@@ -437,7 +461,8 @@ export function createUI({ root, input, audio } = {}) {
           cssPumpkin('deco d1'), cssPumpkin('deco d2'), h('div', { class: 'fog' }), h('div', { class: 'twinkles' })),
         h('div', { class: 'title-main' },
           h('div', { class: 'logo-box' }, labEmblem(), logo, h('p', { class: 'subtitle' }, t('game.subtitle'))),
-          menu));
+          menu),
+        langToggle(profile, onSettingsChange));
       if (state.modal === 'settings') frag.append(settingsModal(state, profile, onSettingsChange, 'settings'));
       if (state.modal === 'howto') frag.append(howToModal(state, 'howto'));
       if (state.modal === 'confirm') {

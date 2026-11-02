@@ -138,10 +138,11 @@ The current version runs at https://pumpkinlab.tomeij.net. Every push to `main` 
 | Pause | Esc or P | pause button at the top right |
 | Menus | arrow keys + Enter/space bar, Esc = back | tap |
 
-The mouse works everywhere in the menus. You'll find **Settings** (language, difficulty, song,
-volume) on the title screen and in the pause menu. That's also where you can switch the game to
-English, and where you'll find two switches: **Music on/off** and **Sound effects on/off**. They
-are remembered, even if you open the game again later.
+The mouse works everywhere in the menus. Switch between Dutch and English right away with the
+**NL | EN** toggle at the top right of the title screen. You'll find **Settings** (language,
+difficulty, song, volume) on the title screen and in the pause menu, along with two switches:
+**Music on/off** and **Sound effects on/off**. Everything is remembered, even if you open the game
+again later.
 
 ## Files
 
