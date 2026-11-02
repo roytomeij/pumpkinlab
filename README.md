@@ -1,5 +1,7 @@
 # PumpkinLab
 
+![PumpkinLab](media/header-en.png)
+
 A cheerful, spooky browser game for kids around 12 years old. You walk around a Halloween lab
 (seen at an angle from above), smash pumpkins with your club, and pick up the coins. But watch
 out: a skeleton, a zombie, or a ghost climbs out of some of the pumpkins!
@@ -31,6 +33,34 @@ out: a skeleton, a zombie, or a ghost climbs out of some of the pumpkins!
 
 Everything (graphics and sound) is made in code. No libraries, no image or sound files, and no
 build step needed.
+
+## Screenshots
+
+| | |
+|---|---|
+| ![Title screen](media/screenshots/01-title-en.jpg) | ![Smashing pumpkins in level 1](media/screenshots/02-smash.jpg) |
+| The title screen | Smashing pumpkins: coins, and a skeleton climbing out |
+| ![Monsters chasing the player](media/screenshots/03-monsters.jpg) | ![The wolf howls and reveals a ghost](media/screenshots/04-wolf-ghost.jpg) |
+| Zombies and a skeleton give chase, the wolf helps | The wolf howls, so the nearby ghost can be hit |
+| ![Five pets following the player](media/screenshots/05-pets.jpg) | ![The shop](media/screenshots/06-shop-en.jpg) |
+| Five pets at once; the cat shows what's inside the pumpkins | The shop between rooms |
+| ![Choosing pets](media/screenshots/07-pet-select-en.jpg) | ![Room cleared, door open](media/screenshots/08-door-open.jpg) |
+| Picking which pets come along | Room cleared: the door opens and the coins fly to you |
+
+![Playing on a phone](media/screenshots/09-phone.jpg)
+
+*On a phone or tablet you play with a joystick and a hit button.*
+
+### Images
+
+Everything in [`media/`](media) may be used to write about the game:
+
+- Avatar (1024×1024): [`avatar-emblem.png`](media/avatar-emblem.png) and
+  [`avatar-wordmark.png`](media/avatar-wordmark.png) (with the name)
+- Header / social image (1200×630): [`header-en.png`](media/header-en.png) and
+  [`header-nl.png`](media/header-nl.png) (Dutch)
+- Screenshots (1600 px wide) in [`media/screenshots/`](media/screenshots), with Dutch (`-nl`) and English
+  (`-en`) versions of the title screen, the shop and pet selection
 
 ## Starting the game
 
@@ -79,6 +109,7 @@ index.html            page with the canvas and the UI layer
 style.css             styling for all menus, HUD, toasts, and touch buttons
 DESIGN.md             game rules and agreements between the modules
 start.command         macOS launcher (server + browser)
+media/                avatar, header image, and screenshots (not part of the game)
 src/
   config.js           all game numbers (balance, levels, pets, clubs, upgrades, spawner)
   main.js             starts everything up; window.pompoenlab = engine (handy for debugging)
@@ -110,3 +141,7 @@ src/
     sfx.js            the sound effects
     synth.js          synthesizer building blocks
 ```
+
+## License
+
+[MIT](LICENSE) © Roy Tomeij
