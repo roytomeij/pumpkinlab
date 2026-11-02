@@ -1,4 +1,19 @@
+<p align="center">
+  <img src="media/avatar-emblem.png" width="128" height="128" alt="PumpkinLab logo">
+</p>
+
 # PumpkinLab
+
+> [!WARNING]
+> **This code was written entirely by Claude Code (an AI), without human
+> intervention or human code review.** The game idea and the feedback came from
+> people, and a human has played it and found it to work, but nobody has reviewed
+> the code line by line. **Use it at your own risk.** It's a game that runs only
+> in your browser: it stores nothing but your progress (in localStorage) and
+> sends nothing anywhere.
+
+**You don't need to install anything to play:** just open
+**https://pumpkinlab.tomeij.net** in your browser, on a computer, tablet, or phone.
 
 ![PumpkinLab](media/header-en.png)
 
@@ -61,6 +76,30 @@ Everything in [`media/`](media) may be used to write about the game:
   [`header-nl.png`](media/header-nl.png) (Dutch)
 - Screenshots (1600 px wide) in [`media/screenshots/`](media/screenshots), with Dutch (`-nl`) and English
   (`-en`) versions of the title screen, the shop and pet selection
+
+## How this game was made
+
+1. **The idea came from my 12-year-old.** They explained the whole game in a voice memo (in Dutch): a
+   Halloween lab with rooms, pumpkins you smash with a club, and out of each one comes a coin, a better
+   club, or a monster. The rules were theirs too: a skeleton takes one hit, a zombie three, a ghost can
+   only be hit after the wolf has howled, you get a pet with its own special power after every level, and
+   there's a shop between the rooms. A reference picture came along, only to show the perspective
+   (2D, seen at an angle from above).
+2. **Built with Claude Code.** Claude first asked a numbered list of questions (controls, hearts, number
+   of levels, difficulty, languages, music). Then several AI agents worked in parallel, each on its own
+   part: game rules, monsters and pets, art, menus, and sound. Six of the nine pets were invented by
+   Claude, on request.
+3. **Everything is code.** No images, no sound files, no libraries: all the art, the three songs, and
+   the sound effects are generated in code.
+4. **Looking along the way.** The in-between designs were shown on a separate page. Automated tests
+   played the game in a browser, and a bot played level 1 over and over to check it wasn't too hard.
+5. **Playtesting and feedback.** My 12-year-old played version 1 and came back with a list: fix a
+   glitch in the corners, twice as many pumpkins, more upgrades (like a 4th pet spot from level 7),
+   monsters that appear on their own, and switches in the settings to turn the music and sound effects
+   off. That became version 2.
+6. **Final round.** The coin magnet upgrade was dropped, the game was renamed from *Pompoenlab* to
+   *PumpkinLab* with a new logo, and there were fixes for the iPhone (double-tap zoom, the logo) and
+   for sounds and music playing over each other.
 
 ## Starting the game
 
