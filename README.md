@@ -9,8 +9,10 @@
 > intervention or human code review.** The game idea and the feedback came from
 > people, and a human has played it and found it to work, but nobody has reviewed
 > the code line by line. **Use it at your own risk.** It's a game that runs only
-> in your browser: it stores nothing but your progress (in localStorage) and
-> sends nothing anywhere.
+> in your browser: it stores nothing but your progress (in localStorage). The
+> online version counts visits with self-hosted, cookieless
+> [Umami](https://umami.is) (no cookies, no IP addresses); playing locally sends
+> nothing anywhere.
 
 **You don't need to install anything to play:** just open
 **https://pumpkinlab.tomeij.net** in your browser, on a computer, tablet, or phone.
